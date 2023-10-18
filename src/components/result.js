@@ -1,11 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-const Result = ({isWin}) => {
+const Result = ({ isWin, handleRestart }) => {
   return (
-      <p className="result">
+    <div>
+      <p className="main__result-text">
         {isWin ? 'You win!' : 'Sorry, you lost :('}
       </p>
-  );
-};
+      <button className="main__restart" onClick={handleRestart}>Try again
+      </button>
+    </div>
+  )
+}
 
-export default Result;
+export default Result

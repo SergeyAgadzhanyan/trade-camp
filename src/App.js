@@ -5,7 +5,6 @@ import {getChartObject} from './utils/chatObjectUtils';
 import {checkByWinningPrice} from './utils/resultUtils';
 import Result from './components/result';
 import ActionButtons from './components/actionButtons';
-import './blocks/main/main.css'
 
 function App() {
   const [rangeForTrading, setRangeForTrading] = React.useState(30);
@@ -15,41 +14,57 @@ function App() {
   const [profitPercent, setProfitPercent] = React.useState(5);
   const [losePercent, setLosePercent] = React.useState(3);
   const [options, setOptions] = React.useState({
-    options: {},
-    series: [],
+    options: {}, series: [],
   });
   const [isShowResult, setIsShowResult] = React.useState(false);
   const [isWin, setIsWin] = React.useState(false);
 
-  React.useEffect(() => {
+  React.useEffect(() => renderChart(), []);
+
+  function renderChart() {
     const {newStartDate, newSeries} = makeRandomCandleRange(dataCount);
     setOptions({
-      options: {}, series: [
+      options: {
+        xaxis: {
+          type: 'datetime',
+        },
+        annotations: {
+          points: [],
+        },
+      }, series: [
         {
-          name: 'TSLA',
-          data: newSeries,
+          name: 'TSLA', data: newSeries,
         }],
     });
     setStartDate(newStartDate);
     setLastDate(newStartDate + dataCount);
-  }, []);
+  }
 
   function setNewSeriesWithTradeResult({isWin, index, action}) {
-    const countTo = dataCount + index + 1;
+
+    const countTo = dataCount + index;
     const newSeries = getNewSeries(startDate, countTo);
-    const dataOne = newSeries[newSeries.length - index];
+    const dataOne = newSeries[dataCount - 1];
     const dataTwo = newSeries[newSeries.length - 1];
     const dateOne = new Date(dataOne.x).toDateString();
-    const priceOne = dataOne.y[3];
+    const priceOne = dataOne.y;
     const dateTwo = new Date(dataTwo.x).toDateString();
-    const priceTwo = dataTwo.y[3];
-    setOptions(getChartObject(dateOne, dateTwo, priceOne, priceTwo, newSeries));
+    const priceTwo = dataTwo.y;
+    setOptions(getChartObject(
+        {dateOne, dateTwo, priceOne, priceTwo, newSeries, isWin, action}));
     setIsShowResult(true);
     setIsWin(isWin);
+
+  }
+
+  function restart() {
+    setIsShowResult(false);
+    renderChart();
   }
 
   function handleAction(action) {
-    const lastPrice = parseFloat(options.series[0].data[dataCount - 1]['y'][3]);
+    const lastPrice = parseFloat(
+        options.series[0].data[dataCount - 1]['y'][3]);
     let winningPrice;
     let losePrice;
     if (action === 'buy') {
@@ -61,7 +76,7 @@ function App() {
     }
 
     const nextSeries = getNewSeries(lastDate, rangeForTrading);
-    for (let index = 0; index < nextSeries.length; index++) {
+    for (let index = 1; index < nextSeries.length; index++) {
       const currentPrice = action === 'buy'
           ? nextSeries[index]['y'][2]
           : nextSeries[index]['y'][3];
@@ -79,16 +94,14 @@ function App() {
     }
   }
 
-  return (
-      <div className='main'>
-        <CustomChart series={options.series} isWin={isWin}
-                     isShowResult={isShowResult} options={options.options}
-                     onClick={handleAction}/>
-        {isShowResult ? <Result isWin={isWin}/> : <ActionButtons
-            onClick={handleAction}/>
-        }
-      </div>
-  );
+  return (<div className="main">
+    <CustomChart series={options.series} isWin={isWin}
+                 isShowResult={isShowResult} options={options.options}
+                 onClick={handleAction}/>
+    {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
+        <ActionButtons
+            onClick={handleAction}/>}
+  </div>);
 }
 
 export default App;
