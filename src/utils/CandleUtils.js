@@ -5,7 +5,7 @@ arrayData.pop();
 const candleDates = _makeCandle();
 
 export function makeRandomCandleRange(dataCount) {
-  const newStartDate = Math.floor(Math.random() * (candleDates.length - 50));
+  const newStartDate = Math.floor(Math.random() * (candleDates.length - dataCount - 1));
   const newSeries = [...candleDates].splice(newStartDate, dataCount);
   return {newStartDate, newSeries};
 }
