@@ -1,0 +1,15 @@
+@import "./vendor/normalize.css";
+@import "./vendor/fonts/Inter/inter.css";
+@import "./blocks/main/main.css";
+@import "./blocks/main/__button/custom-chart__button.css";
+@import "./blocks/main/__button/_buy/main__button_buy.css";
+@import "./blocks/main/__button/_sell/custom-chart__button_sell.css";
+@import "./blocks/main/__buttons/main__buttons.css";
+@import "./blocks/main/__custom-chart/main__custom-chart.css";
+@import "./blocks/main/__result/main__result.css";
+@import "./blocks/main/__result-text/main__result-text.css";
+@import "./blocks/main/__result-text/_lose/main__result-text_lose.css";
+@import "./blocks/main/__result-text/_win/main__result-text_win.css";
+@import "./blocks/main/__restart/main__restart.css";
+@import "./blocks/main/__button-row/main__button-row.css";
+@import "./blocks/main/__select-group/main__select-group.css";
