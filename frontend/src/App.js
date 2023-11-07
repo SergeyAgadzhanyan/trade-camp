@@ -102,18 +102,22 @@ function App() {
     }
   }
 
-  return (<div className="main">
-    <CustomChart series={options.series} isWin={isWin}
-                 isShowResult={isShowResult} options={options.options}
-                 onClick={handleAction}/>
-    {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
-        <ActionButtons
-            onClick={handleAction}
-            profitState={{profitPercent, setProfitPercent}}
-            loseState={{losePercent, setLosePercent}}
-        />
-    }
-  </div>);
+  return (
+
+      <div className="main">
+
+
+        <CustomChart series={options.series} isWin={isWin}
+                     isShowResult={isShowResult} options={options.options}
+                     onClick={handleAction}/>
+        {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
+            <ActionButtons
+                onClick={handleAction}
+                profitState={{profitPercent, setProfitPercent}}
+                loseState={{losePercent, setLosePercent}}
+            />
+        }
+      </div>);
 }
 
 export default App;
