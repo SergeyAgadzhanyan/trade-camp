@@ -8,7 +8,10 @@ export async function makeRandomCandleRange(dataCount, range) {
 
   return [
     ...await fetch(
-        `http://localhost:8080/data/random?sum=${dataCount + range}`)
+        `http://localhost:8080/data/random?sum=${dataCount + range}`,{
+          method: 'GET',
+          credentials: 'include',
+        })
         .then(res => {
           if (res.redirected) throw new NotAuthError('fail login', res.url);
           return res.json();

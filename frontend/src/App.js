@@ -19,7 +19,9 @@ function App() {
   const [isShowResult, setIsShowResult] = React.useState(false);
   const [isWin, setIsWin] = React.useState(false);
 
-  React.useEffect(() => renderChart(), []);
+  React.useEffect(() => {
+    renderChart();
+  }, []);
 
   function renderChart() {
     makeRandomCandleRange(dataCount, rangeForTrading).then(([...fullS]) => {

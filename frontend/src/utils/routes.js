@@ -1,5 +1,6 @@
 import {createBrowserRouter} from 'react-router-dom';
 import App from '../App';
+import Login from '../components/login';
 
 export function getRoutes() {
   return createBrowserRouter([
@@ -9,7 +10,7 @@ export function getRoutes() {
     },
     {
       path: '/login',
-      element: <>Login page</>
+      element: <Login/>
     }
   ]);
 }
