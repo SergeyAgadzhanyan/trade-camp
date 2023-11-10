@@ -23,12 +23,12 @@ function Login() {
   }
 
   function handleGetMe() {
-    fetch('http://localhost:8080/data/me', {
+    fetch('http://localhost:8080/user/me', {
       method: 'Get',
       credentials: 'include',
     })
         .then((r) => r.json())
-        .then(data => console.log(data))
+        .then(user => console.log(user.name))
         .catch(e => console.log(e));
   }
 

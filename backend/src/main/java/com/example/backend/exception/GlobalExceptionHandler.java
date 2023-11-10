@@ -16,4 +16,10 @@ public class GlobalExceptionHandler {
         log.warn("Получен статус 404 Not found {}", ex.getMessage(), ex);
         return new BadRequestException(ex.getMessage());
     }
+    @ExceptionHandler(ResourceNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public RuntimeException handleResourceNotFound(ResourceNotFound ex) {
+        log.warn("Получен статус 404 Not found {}", ex.getMessage(), ex);
+        return new BadRequestException(ex.getMessage());
+    }
 }

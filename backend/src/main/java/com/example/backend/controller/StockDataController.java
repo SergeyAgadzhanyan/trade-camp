@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/data")
 @Validated
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class StockDataController {
     private final StockDataService service;
 
@@ -35,8 +34,4 @@ public class StockDataController {
         return service.getRandomStockData(sum);
     }
 
-    @GetMapping("/me")
-    public UserDto getMe(Principal principal) {
-        return new UserDto(principal.getName());
-    }
 }
