@@ -1,0 +1,17 @@
+.login__button-link {
+    background-color: transparent;
+    color: #9a5c5c;
+    border: none;
+    font-family: Inter, serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    box-shadow: none;
+    cursor: pointer;
+    transition: linear 0.2s;
+}
+
+.login__button-link:hover {
+    color: #f88181;
+}

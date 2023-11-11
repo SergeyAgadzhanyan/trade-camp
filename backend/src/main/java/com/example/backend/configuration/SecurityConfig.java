@@ -1,7 +1,5 @@
 package com.example.backend.configuration;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,12 +28,12 @@ public class SecurityConfig {
                                 "http://localhost:3000"))
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perform_login", "/login", "/user").permitAll()
+                        .requestMatchers("/perform_login", "/user").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")
-                        .usernameParameter("user")
-                        .passwordParameter("pass")
+                        .usernameParameter("name")
+                        .passwordParameter("password")
                         .successHandler(new MySuccessLoginHandler()))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new MyUnAuthHandler()));
         return http.build();
