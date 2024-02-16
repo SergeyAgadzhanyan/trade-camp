@@ -1,6 +1,6 @@
 import React from 'react';
 import Text from '../utils/text';
-import BadCredentials from '../error/BadCredentials';
+import AuthApi from '../utils/AuthApi';
 
 function Login() {
   const [name, setName] = React.useState('');
@@ -11,23 +11,13 @@ function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const params = new URLSearchParams({
-      name,
-      password,
-    });
-
-    fetch(submitLink, {
-      method: 'POST',
-      body: params,
-      credentials: 'include',
-    })
-        .then((r) => {
-          if (!r.ok) throw new BadCredentials('Bad credentials');
-          window.location = '/';
-        })
-        .catch(e => {
-          console.log(e)
-        });
+    if (submitName === Text.SIGNIN) return AuthApi.signIn({name, password})
+        .then(() => window.location = '/')
+        .catch(e => console.log(e));
+    return AuthApi.signUp({name, password})
+        .then((r) => r.json())
+        .then(d => console.log(d))
+        .catch(e => console.log(e));
   }
 
   // function handleClick() {

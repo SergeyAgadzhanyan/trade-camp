@@ -26,9 +26,11 @@ public class SecurityConfig {
                 .headers(h -> h
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin",
                                 "http://localhost:3000"))
+                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods",
+                                "POST, PUT, GET, OPTIONS, DELETE"))
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perform_login", "/user").permitAll()
+                        .requestMatchers("/perform_login","/user").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")

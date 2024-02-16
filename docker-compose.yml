@@ -1,0 +1,51 @@
+version: '3.1'
+services:
+
+  backend:
+    build: ./backend
+    image: backend-image
+    container_name: backend-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+
+  db:
+    image: postgres:14-alpine
+    container_name: db-container
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+
+  frontend:
+    build: ./frontend
+    image: frontend-image
+    container_name: frontend-container
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8080
+
+
+  landing:
+    build: ./landing
+    image: landing-image
+    container_name: landing-container
+    ports:
+      - "3001:3001"
+    depends_on:
+      - frontend
+    environment:
+      - FRONTEND_URL=http://frontend:3000
+
+
+

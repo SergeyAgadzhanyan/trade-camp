@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+
+  main-service:
+    build: ./
+    image: main-image
+    container_name: main-container
+    ports:
+      - "3001:3001"
