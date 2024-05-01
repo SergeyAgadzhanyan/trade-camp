@@ -2,13 +2,13 @@ version: '3.1'
 services:
 
   backend:
-    build: ./backend
-    image: backend-image
+    image: faqman22/backend-image:1
     container_name: backend-container
     ports:
       - "8080:8080"
     depends_on:
       - db
+    restart: on-failure
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - DB_USERNAME=root
@@ -25,8 +25,7 @@ services:
       - POSTGRES_PASSWORD=password
 
   frontend:
-    build: ./frontend
-    image: frontend-image
+    image: faqman22/frontend-image:1
     container_name: frontend-container
     ports:
       - "3000:3000"
@@ -37,8 +36,7 @@ services:
 
 
   landing:
-    build: ./landing
-    image: landing-image
+    image: faqman22/landing-image:1
     container_name: landing-container
     ports:
       - "3001:3001"

@@ -7,25 +7,26 @@ class AuthApi extends Api {
 
     return fetch(Text.LinkSignUp, {
       method: 'POST',
-      body:JSON.stringify({
+      body: JSON.stringify({
         name,
         password,
       }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials:'include'
+      credentials: 'include',
     })
         .then(this._checkResponse);
   }
 
-  signIn({name, password}) {
+  signIn({user, pass}) {
+    const params = new URLSearchParams({
+      'user': user,
+      'pass': pass,
+    });
     return fetch(Text.LinkSignIn, {
       method: 'POST',
-      body: new URLSearchParams({
-        name,
-        password,
-      }),
+      body: params,
       credentials: 'include',
     })
         .then(this._checkResponse);

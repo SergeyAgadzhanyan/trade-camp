@@ -3,21 +3,35 @@ import Text from '../utils/text';
 import AuthApi from '../utils/AuthApi';
 
 function Login() {
-  const [name, setName] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [user, setUser] = React.useState('');
+  const [pass, setPass] = React.useState('');
   const [submitName, setSubmitName] = React.useState(Text.SIGNIN);
   const [linkName, setLinkName] = React.useState(Text.CreateNewAcc);
   const [submitLink, setSubmitLink] = React.useState(Text.LinkSignIn);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (submitName === Text.SIGNIN) return AuthApi.signIn({name, password})
+    if (submitName === Text.SIGNIN) return AuthApi.signIn(
+        {user, pass})
         .then(() => window.location = '/')
         .catch(e => console.log(e));
-    return AuthApi.signUp({name, password})
+    return AuthApi.signUp({user, pass})
         .then((r) => r.json())
         .then(d => console.log(d))
         .catch(e => console.log(e));
+
+    // const params = new URLSearchParams({
+    //   'user': 'u1',
+    //   'pass': 'p1',
+    // });
+    //
+    // fetch('http://localhost:8080/perform_login', {
+    //   method: 'POST',
+    //   body: params,
+    //   credentials: 'include',
+    // })
+    //     .then(() => window.location = "/")
+    //     .catch(e => console.log(e));
   }
 
   // function handleClick() {
@@ -35,23 +49,12 @@ function Login() {
   // }
 
   function handleNameChange(e) {
-    setName(e.target.value);
-    const params = new URLSearchParams({
-      'user': 'u1',
-      'pass': 'p1',
-    });
+    setUser(e.target.value);
 
-    fetch('http://localhost:8080/perform_login', {
-      method: 'POST',
-      body: params,
-      credentials: 'include',
-    })
-        .then(() => window.location = "/")
-        .catch(e => console.log(e));
   }
 
   function handlePasswordChange(e) {
-    setPassword(e.target.value);
+    setPass(e.target.value);
   }
 
   function handleLinkClick() {
@@ -64,17 +67,17 @@ function Login() {
       setLinkName(Text.CreateNewAcc);
       setSubmitLink(Text.LinkSignIn);
     }
-    setName('');
-    setPassword('');
+    setUser('');
+    setPass('');
   }
 
   return (
       <div className="login">
         <form className="login__form" onSubmit={handleSubmit}>
           <h1 className="login__title">Welcome</h1>
-          <input className="login__input" placeholder="Name" value={name}
+          <input className="login__input" placeholder="Name" value={user}
                  onChange={handleNameChange}/>
-          <input className="login__input" value={password}
+          <input className="login__input" value={pass}
                  onChange={handlePasswordChange}
                  placeholder="Password"/>
           <button className={`login__button animate__animated ${submitName ===

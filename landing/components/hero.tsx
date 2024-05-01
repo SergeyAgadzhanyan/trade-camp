@@ -1,10 +1,8 @@
-import VideoThumb from '@/public/images/hero-image-01.jpg'
-import ModalVideo from '@/components/modal-video'
 import Image from 'next/image';
 import TeamImg1 from '../public/images/team1.jpg'
 
 export default function qHero() {
-    let url = "http://frontend:3000";
+    let url = "http://localhost:3000";
     return (
         <section>
             <div className="max-w-6xl mx-auto px-4 sm:px-6 relative">
@@ -43,7 +41,7 @@ export default function qHero() {
                             </div>
                             <div data-aos="fade-up" data-aos-delay="600">
                                 <a className="btn text-white bg-gray-700 hover:bg-gray-800 w-full sm:w-auto sm:ml-4"
-                                   href="#0">Связаться с нами</a>
+                                   href="#contacts">Связаться с нами</a>
                             </div>
                         </div>
                     </div>
