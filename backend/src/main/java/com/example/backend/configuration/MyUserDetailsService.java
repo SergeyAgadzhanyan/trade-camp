@@ -15,6 +15,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new MyUserPrincipal(new User("user1", encoder.encode("p1")));
+        return new MyUserPrincipal(new User(null, "user1", encoder.encode("p1")));
     }
 }

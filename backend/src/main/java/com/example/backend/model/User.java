@@ -1,13 +1,19 @@
 package com.example.backend.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@RequiredArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Table(name = "users")
 public class User {
-    private final String name;
-    private final String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String password;
 }

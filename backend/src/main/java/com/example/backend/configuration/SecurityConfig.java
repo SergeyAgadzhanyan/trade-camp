@@ -24,19 +24,20 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(h -> h
-                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin", "http://localhost:3000"))
+                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin",
+                                "http://localhost:3000"))
+                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods",
+                                "POST, PUT, GET, OPTIONS, DELETE"))
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perform_login", "/login").permitAll()
+                        .requestMatchers("/perform_login","/user").permitAll()
                         .anyRequest().authenticated())
-//
                 .formLogin(form -> form
-                        .loginPage("http://localhost:3000/login")
                         .loginProcessingUrl("/perform_login")
-                        .defaultSuccessUrl("http://localhost:3000?success=true", true)
-                        .failureUrl("http://localhost:3000/login?success=false")
-                        .usernameParameter("user")
-                        .passwordParameter("pass"));
+                        .usernameParameter("name")
+                        .passwordParameter("password")
+                        .successHandler(new MySuccessLoginHandler()))
+                .exceptionHandling(e -> e.authenticationEntryPoint(new MyUnAuthHandler()));
         return http.build();
     }
 }

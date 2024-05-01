@@ -2,9 +2,11 @@ package com.example.backend.mapper;
 
 import com.example.backend.dto.StockDataDto;
 import com.example.backend.model.StockData;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StockDataMapper {
-    public static StockDataDto toDto(StockData s) {
+    public StockDataDto toDto(StockData s) {
         return StockDataDto.builder()
                 .name(s.getName())
                 .open(s.getOpen())

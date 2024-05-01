@@ -16,13 +16,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockDataService {
     private final StockDataStorage storage;
+    private final StockDataMapper mapper;
 
     public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
         return storage.findByNameAndDateBetween(name, from, to, Sort.by("date")).stream()
-                .map(StockDataMapper::toDto).collect(Collectors.toList());
+                .map(mapper::toDto).collect(Collectors.toList());
     }
 
     public List<StockDataDto> getRandomStockData(int sum) {
-        return storage.getRandomData(Symbols.TSLA.name(), sum).stream().map(StockDataMapper::toDto).collect(Collectors.toList());
+        return storage.getRandomData(Symbols.TSLA.name(), sum).stream().map(mapper::toDto).collect(Collectors.toList());
     }
 }

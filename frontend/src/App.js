@@ -5,6 +5,8 @@ import {getChartObject} from './utils/chatObjectUtils';
 import {checkByWinningPrice} from './utils/resultUtils';
 import Result from './components/result';
 import ActionButtons from './components/actionButtons';
+import ProfilePopup from './components/profilePopup';
+import Header from './components/header';
 
 function App() {
   const [rangeForTrading, setRangeForTrading] = React.useState(30);
@@ -18,8 +20,11 @@ function App() {
   });
   const [isShowResult, setIsShowResult] = React.useState(false);
   const [isWin, setIsWin] = React.useState(false);
+  const [isOpenProfilePopup, setIsOpenProfilePopup] = React.useState(false);
 
-  React.useEffect(() => renderChart(), []);
+  React.useEffect(() => {
+    renderChart();
+  }, []);
 
   function renderChart() {
     makeRandomCandleRange(dataCount, rangeForTrading).then(([...fullS]) => {
@@ -44,8 +49,6 @@ function App() {
 
   function setNewSeriesWithTradeResult({isWin, index, action}) {
 
-    // const countTo = dataCount + index;
-    // const newSeries = getNewSeries(startDate, countTo);
     const dataOne = shortSeries[shortSeries.length - 1];
     const dataTwo = fullSeries[index];
     const dateOne = new Date(dataOne.x).toDateString();
@@ -70,6 +73,10 @@ function App() {
   function restart() {
     setIsShowResult(false);
     renderChart();
+  }
+
+  function toggleOpenPopup() {
+    setIsOpenProfilePopup(!isOpenProfilePopup);
   }
 
   function handleAction(action) {
@@ -102,18 +109,23 @@ function App() {
     }
   }
 
-  return (<div className="main">
-    <CustomChart series={options.series} isWin={isWin}
-                 isShowResult={isShowResult} options={options.options}
-                 onClick={handleAction}/>
-    {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
-        <ActionButtons
-            onClick={handleAction}
-            profitState={{profitPercent, setProfitPercent}}
-            loseState={{losePercent, setLosePercent}}
-        />
-    }
-  </div>);
+  return (
+      <>
+        <Header clickPopup={toggleOpenPopup}/>
+        <div className="main">
+          <CustomChart series={options.series} isWin={isWin}
+                       isShowResult={isShowResult} options={options.options}
+                       onClick={handleAction}/>
+          {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
+              <ActionButtons
+                  onClick={handleAction}
+                  profitState={{profitPercent, setProfitPercent}}
+                  loseState={{losePercent, setLosePercent}}
+              />
+          }
+        </div>
+        <ProfilePopup isOpen={isOpenProfilePopup}/>
+      </>);
 }
 
 export default App;
