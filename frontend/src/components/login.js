@@ -36,6 +36,18 @@ function Login() {
 
   function handleNameChange(e) {
     setName(e.target.value);
+    const params = new URLSearchParams({
+      'user': 'u1',
+      'pass': 'p1',
+    });
+
+    fetch('http://localhost:8080/perform_login', {
+      method: 'POST',
+      body: params,
+      credentials: 'include',
+    })
+        .then(() => window.location = "/")
+        .catch(e => console.log(e));
   }
 
   function handlePasswordChange(e) {
