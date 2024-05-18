@@ -35,7 +35,6 @@ public class UserService {
     public UserDto getMe(String userName) throws ResourceNotFound {
         return userMapper.toDto(userRepository.findByName(userName)
                 .orElseThrow(() -> new ResourceNotFound(Messages.RESOURCE_NOT_FOUND.getMessage())));
-//        return UserDto.builder().name("testName").build();
     }
 
 }
