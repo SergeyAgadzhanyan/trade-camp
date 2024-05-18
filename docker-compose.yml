@@ -1,49 +1,66 @@
-version: '3.1'
+version: '2.1'
 services:
 
-  backend:
-    image: faqman22/backend-image:1
-    container_name: backend-container
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    restart: on-failure
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
-      - DB_USERNAME=root
-      - DB_PASSWORD=password
+  #  stock:
+  #    image: ./stock
+  #    container_name: stock-container
+  #    ports:
+  #      - "8080:8080"
+  #    depends_on:
+  #      - db-stock
+  #    restart: on-failure
+  #    environment:
+  #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+  #      - DB_USERNAME=root
+  #      - DB_PASSWORD=password
 
-  db:
+  db-stock:
     image: postgres:14-alpine
-    container_name: db-container
+    container_name: db-stock
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=stock_db
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=password
 
-  frontend:
-    image: faqman22/frontend-image:1
-    container_name: frontend-container
+  db-user:
+    image: postgres:14-alpine
+    container_name: db-user
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "6543:5432"
     environment:
-      - BACKEND_URL=http://backend:8080
+      - POSTGRES_DB=user_db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+
+  #  user:
+  #    image: ./user
+  #    container_name: user-container
+  #    ports:
+  #      - "8081:8081"
+  #    depends_on:
+  #      - db-user
+  #    restart: on-failure
+  #    environment:
+  #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/user
+  #      - DB_USERNAME=root
+  #      - DB_PASSWORD=password
 
 
-  landing:
-    image: faqman22/landing-image:1
-    container_name: landing-container
+
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    hostname: rmq_stock
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 1147483648
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
     ports:
-      - "3001:3001"
-    depends_on:
-      - frontend
-    environment:
-      - FRONTEND_URL=http://frontend:3000
-
-
+      - 15672:15672
+      - 5672:5672
 
