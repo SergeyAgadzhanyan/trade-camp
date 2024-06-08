@@ -10,17 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    public User toModel(UserDtoCreate u) {
-        return User.builder()
-                .id(null)
-                .name(u.getName())
-                .password(u.getPassword())
-                .build();
-    }
-
-    public UserDto toDto(User user) {
-        return UserDto.builder()
-                .name(user.getName())
-                .build();
-    }
+//    public User toModel(UserDtoCreate u) {
+//        return User.builder()
+//                .id(null)
+//                .name(u.getName())
+//                .password(u.getPassword())
+//                .build();
+//    }
+//
+//    public UserDto toDto(User user) {
+//        return UserDto.builder()
+//                .name(user.getName())
+//                .password(user.getPassword())
+//                .build();
+//    }
 }

@@ -2,6 +2,7 @@ package com.tradecamp.user.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tradecamp.user.dto.UserDto;
 import com.tradecamp.user.dto.UserDtoGet;
 import com.tradecamp.user.model.RabbitResposne;
 import com.tradecamp.user.utils.RabbitUtil;
@@ -21,13 +22,13 @@ public class UserConsumerService {
     private final ObjectMapper objectMapper;
 
     @RabbitListener(queues = "stock_qu")
-    public Message getMe(Message message) {
-        RabbitResposne rabbitResposne = null;
+    public Message findUser(Message message) {
+        RabbitResposne rabbitResposne;
         log.info("Rabbit message : {}", message);
         try {
             UserDtoGet userDtoGet = objectMapper.readValue(message.getBody(), UserDtoGet.class);
             rabbitResposne = new RabbitResposne(objectMapper.writeValueAsString(userService
-                    .getMe(userDtoGet.getName())), 200);
+                    .find(userDtoGet)), 200);
         } catch (Exception e) {
             rabbitResposne = new RabbitResposne(e.getMessage(), 400);
         }

@@ -2,6 +2,7 @@ package com.tradecamp.web.controller;
 
 import com.tradecamp.web.dto.UserDto;
 import com.tradecamp.web.dto.UserDtoCreate;
+import com.tradecamp.web.dto.UserDtoGet;
 import com.tradecamp.web.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,12 @@ public class UserController {
     }
 
     @GetMapping
-    public UserDto find(@Valid @RequestBody UserDtoCreate u) {
+    public UserDto find(@Valid @RequestBody UserDtoGet u) {
         return userService.find(u);
     }
 
     @GetMapping("/me")
     public UserDto getMe() {
-        UserDto me = userService.getMe();
-        return me;
+        return userService.getMe();
     }
 }

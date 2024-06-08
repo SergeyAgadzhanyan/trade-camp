@@ -32,18 +32,19 @@ public class UserService {
         return null;
     }
 
-    public UserDto find(UserDtoCreate u) {
-//        User user = userRepository.findByName(u.getName())
-//                .orElseThrow(() -> new ResourceNotFound(Messages.RESOURCE_NOT_FOUND.getMessage()));
-//
-//        if (!encoder.matches(u.getPassword(), user.getPassword()))
-//            throw new ResourceNotFound(Messages.RESOURCE_NOT_FOUND.getMessage());
-//        return mapper.toDto(user);
-        return null;
+    public UserDto find(UserDtoGet userDtoGet) {
+        try {
+            Message messageFromRm = rabbitTemplate.sendAndReceive(RabbitUtil.EXCHANGE_USER, RabbitUtil.ROUTING_KEY_USER,
+                    new Message(objectMapper.writeValueAsString(userDtoGet).getBytes()));
+            return rabbitUtil.convertToUserDto(messageFromRm);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+
     public UserDto getMe() {
-        UserDtoGet userDtoGet = new UserDtoGet("testname");
+        UserDtoGet userDtoGet = new UserDtoGet("admin");
         String message;
         try {
             message = objectMapper.writeValueAsString(userDtoGet);

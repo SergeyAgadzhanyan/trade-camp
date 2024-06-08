@@ -28,10 +28,9 @@ public class SecurityConfig {
                                 "POST, PUT, GET, OPTIONS, DELETE"))
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/perform_login", "/user").permitAll()
-                                .anyRequest()
-                                .permitAll()
-//                        .authenticated()
+                        .requestMatchers("/perform_login", "/user").permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")

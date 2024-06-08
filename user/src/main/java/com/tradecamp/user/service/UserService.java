@@ -2,9 +2,10 @@ package com.tradecamp.user.service;
 
 import com.tradecamp.user.dto.UserDto;
 import com.tradecamp.user.dto.UserDtoCreate;
+import com.tradecamp.user.dto.UserDtoGet;
 import com.tradecamp.user.exception.DbException;
 import com.tradecamp.user.exception.ResourceNotFound;
-import com.tradecamp.user.mapper.UserMapper;
+import com.tradecamp.user.mapper.UserMapperInterface;
 import com.tradecamp.user.model.User;
 import com.tradecamp.user.repository.UserRepository;
 import com.tradecamp.user.utils.Messages;
@@ -16,26 +17,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final UserMapperInterface userMapperInterface;
 
     public UserDto create(UserDtoCreate u) {
         try {
-            return userMapper.toDto(userRepository.save(userMapper.toModel(u)));
+            return userMapperInterface.toDto(userRepository.save(userMapperInterface.toUser(u)));
         } catch (DataIntegrityViolationException e) {
             throw new DbException(Messages.DATABASE_CONFLICT.getMessage());
         }
     }
 
-    public UserDto find(UserDtoCreate u) {
-        User user = userRepository.findByName(u.getName())
+    public UserDto find(UserDtoGet userDtoGet) {
+        User user = userRepository.findByName(userDtoGet.getName())
                 .orElseThrow(() -> new ResourceNotFound(Messages.RESOURCE_NOT_FOUND.getMessage()));
-        return userMapper.toDto(user);
+        return userMapperInterface.toDto(user);
     }
 
-    public UserDto getMe(String userName) throws ResourceNotFound {
-        return userMapper.toDto(userRepository.findByName(userName)
-                .orElseThrow(() -> new ResourceNotFound(Messages.RESOURCE_NOT_FOUND.getMessage())));
-//        return UserDto.builder().name("testName").build();
-    }
 
 }

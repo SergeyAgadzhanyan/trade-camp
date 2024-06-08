@@ -14,6 +14,9 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class RabbitUtil {
+
+    public static String ROUTING_KEY_USER = "stock";
+    public static String EXCHANGE_USER = "stock_ex";
     private final ObjectMapper objectMapper;
 
     public UserDto convertToUserDto(Message messageFromRm) {

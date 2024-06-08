@@ -1,11 +1,13 @@
 package com.tradecamp.user.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class RabbitResposne {
-    private final String message;
-    private final int code;
+    private String message;
+    private int code;
 }
