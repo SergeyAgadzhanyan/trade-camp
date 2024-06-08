@@ -143,5 +143,11 @@ dist
 /.idea/vcs.xml
 /backend/.mvn/wrapper/maven-wrapper.jar
 /backend/.mvn/wrapper/maven-wrapper.properties
-/backend/.mvn/wrapper/maven-wrapper.jar
+
 /.idea/
+/rabbitmq/
+/*/.mvn
+/*/mvnw
+/*/mvnw.cmd
+/*/target
+/*/web.iml
