@@ -1,8 +1,7 @@
 package com.tradecamp.web.controller;
 
 
-import com.tradecamp.web.dto.StockDataDto;
-import com.tradecamp.web.service.RabbitMQProducerService;
+import com.tradecamp.models.dto.StockDataDto;
 import com.tradecamp.web.service.StockDataService;
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;

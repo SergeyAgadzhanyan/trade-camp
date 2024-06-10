@@ -1,6 +1,6 @@
 package com.tradecamp.web.configuration;
 
-import com.tradecamp.web.dto.UserDto;
+import com.tradecamp.models.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class MyUserPrincipal implements UserDetails {
-    private final UserDto userDto;
+    private final User user;
 
 
     @Override
@@ -21,12 +21,12 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userDto.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userDto.getName();
+        return user.getName();
     }
 
     @Override

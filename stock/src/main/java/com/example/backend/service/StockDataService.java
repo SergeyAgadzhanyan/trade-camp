@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.StockDataDto;
 import com.example.backend.mapper.StockDataMapper;
 import com.example.backend.storage.StockDataStorage;
+import com.tradecamp.models.dto.StockDataDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;

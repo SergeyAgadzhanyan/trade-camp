@@ -1,7 +1,7 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dto.StockDataDto;
-import com.example.backend.model.StockData;
+import com.tradecamp.models.dto.StockDataDto;
+import com.tradecamp.models.model.StockData;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.HistoricCandle;
 

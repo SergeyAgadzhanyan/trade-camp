@@ -1,6 +1,6 @@
 package com.example.backend.storage;
 
-import com.example.backend.model.StockData;
+import com.tradecamp.models.model.StockData;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
