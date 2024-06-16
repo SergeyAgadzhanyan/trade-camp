@@ -28,15 +28,18 @@ public class SecurityConfig {
                                 "POST, PUT, GET, OPTIONS, DELETE"))
                         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perform_login", "/user").permitAll()
+                        .requestMatchers("/perform_login").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
+                //при добавлении кастомного обработчика пропадает дефолтная страница логина
+//                .exceptionHandling(e -> e.authenticationEntryPoint(new MyUnAuthHandler()))
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")
-                        .usernameParameter("name")
+                        .usernameParameter("username")
                         .passwordParameter("password")
-                        .successHandler(new MySuccessLoginHandler()));
+                        .successHandler(new MySuccessLoginHandler())
+                        .failureHandler(new MyUnAuthHandler()));
         return http.build();
     }
 }

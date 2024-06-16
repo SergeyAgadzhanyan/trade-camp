@@ -13,6 +13,8 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
+import static com.tradecamp.user.utils.RabbitUtil.*;
+
 @Service
 @EnableRabbit
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class UserConsumerService {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(queues = "user_find")
+    @RabbitListener(queues = USER_FIND_QUEUE)
     public Message findUser(Message message) {
         RabbitResposne rabbitResposne;
         log.info("Rabbit message for find user: {}", message);
@@ -37,7 +39,7 @@ public class UserConsumerService {
     }
 
 
-    @RabbitListener(queues = "user_create")
+    @RabbitListener(queues = USER_CREATE_QUEUE)
     public Message create(Message message) {
         RabbitResposne rabbitResposne;
         log.info("Rabbit message for create user: {}", message);
@@ -56,7 +58,7 @@ public class UserConsumerService {
         }
     }
 
-    @RabbitListener(queues = "user_delete")
+    @RabbitListener(queues = USER_DELETE_QUEUE)
     public Message delete(Message message) {
         RabbitResposne rabbitResposne;
         log.info("Rabbit message for delete user: {}", message);
