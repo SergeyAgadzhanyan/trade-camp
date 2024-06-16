@@ -32,7 +32,7 @@ public class StockDataService {
                 .map(mapper::toDto).collect(Collectors.toList());
     }
 
-    public List<StockDataDto> getRandomStockData(int sum) {
+    public List<StockDataDto> getRandomStockData() {
         var api = InvestApi.create(token);
         var from = Instant.now().minus(30, ChronoUnit.DAYS);
         var to = Instant.now();

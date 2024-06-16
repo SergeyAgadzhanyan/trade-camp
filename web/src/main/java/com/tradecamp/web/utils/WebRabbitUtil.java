@@ -13,12 +13,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class RabbitUtil {
+public class WebRabbitUtil {
 
-    public static String ROUTING_KEY_FIND_USER = "find";
-    public static String ROUTING_KEY_CREATE_USER = "create";
-    public static String ROUTING_KEY_DELETE_USER = "delete";
-    public static String EXCHANGE_USER = "user_ex";
     private final ObjectMapper objectMapper;
 
     public <T> T convertMessage(Message message, Class<T> valueType) {

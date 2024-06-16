@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradecamp.models.dto.UserDtoGet;
 import com.tradecamp.models.model.RabbitResposne;
 import com.tradecamp.models.model.User;
-import com.tradecamp.user.utils.RabbitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -13,7 +12,9 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-import static com.tradecamp.user.utils.RabbitUtil.*;
+import static com.tradecamp.models.util.RabbitUtil.makeJsonError;
+import static com.tradecamp.models.util.RabbitVar.*;
+
 
 @Service
 @EnableRabbit
@@ -54,7 +55,7 @@ public class UserConsumerService {
         try {
             return new Message(objectMapper.writeValueAsBytes(rabbitResposne));
         } catch (JsonProcessingException e) {
-            return new Message(RabbitUtil.makeJsonError(e.getMessage(), 300).getBytes());
+            return new Message(makeJsonError(e.getMessage(), 300).getBytes());
         }
     }
 
@@ -73,7 +74,7 @@ public class UserConsumerService {
         try {
             return new Message(objectMapper.writeValueAsBytes(rabbitResposne));
         } catch (JsonProcessingException e) {
-            return new Message(RabbitUtil.makeJsonError(e.getMessage(), 300).getBytes());
+            return new Message(makeJsonError(e.getMessage(), 300).getBytes());
         }
     }
 
@@ -81,7 +82,7 @@ public class UserConsumerService {
         try {
             return new Message(objectMapper.writeValueAsBytes(rabbitResposne));
         } catch (JsonProcessingException e) {
-            return new Message(RabbitUtil.makeJsonError(e.getMessage(), 300).getBytes());
+            return new Message(makeJsonError(e.getMessage(), 300).getBytes());
         }
     }
 }
