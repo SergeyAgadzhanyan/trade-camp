@@ -23,7 +23,6 @@ import static com.tradecamp.models.util.RabbitVar.STOCK_ROUTING_KEY_RANDOM;
 public class StockDataService {
     private final RabbitTemplate rabbitTemplate;
     private final ObjectMapper objectMapper;
-    private final RabbitUtil rabbitUtil;
 
     public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
 //        return storage.findByNameAndDateBetween(name, from, to, SpringDataWebProperties.Sort.by("date")).stream()
@@ -39,7 +38,7 @@ public class StockDataService {
             StockRandomRequest stockRandomRequest = StockRandomRequest.builder().sum(sum).build();
             Message receive = rabbitTemplate.sendAndReceive(STOCK_EXCHANGE, STOCK_ROUTING_KEY_RANDOM,
                     new Message(objectMapper.writeValueAsString(stockRandomRequest).getBytes()));
-            return rabbitUtil.fromMessageResponseToObject(receive, (Class<List<StockDataDto>>) (Object) List.class);
+            return RabbitUtil.fromMessageResponseToObject(receive, (Class<List<StockDataDto>>) (Object) List.class);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

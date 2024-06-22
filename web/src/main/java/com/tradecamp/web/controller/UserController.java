@@ -1,8 +1,7 @@
 package com.tradecamp.web.controller;
 
+import com.tradecamp.models.dto.UserDto;
 import com.tradecamp.models.dto.UserDtoCreate;
-import com.tradecamp.models.dto.UserDtoGet;
-import com.tradecamp.web.mapper.UserMapper;
 import com.tradecamp.web.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,17 +18,16 @@ import org.springframework.web.bind.annotation.*;
 
 public class UserController {
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserDtoGet create(@Valid @RequestBody UserDtoCreate userDtoCreate) {
-        return userMapper.toDtoGet(userService.create(userDtoCreate));
+    public UserDto create(@Valid @RequestBody UserDtoCreate userDtoCreate) {
+        return userService.create(userDtoCreate);
     }
 
     @GetMapping
-    public UserDtoGet get(@RequestParam @NotBlank @Size(min = 3) String name) {
-        return userMapper.toDtoGet(userService.getByName(name));
+    public UserDto get(@RequestParam @NotBlank @Size(min = 3) String name) {
+        return userService.getByName(name);
     }
 
     @DeleteMapping

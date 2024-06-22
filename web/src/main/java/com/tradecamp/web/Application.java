@@ -6,11 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 
 @SpringBootApplication
-@ComponentScan("com.tradecamp.*")
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
 }

@@ -1,7 +1,7 @@
 package com.tradecamp.web.configuration;
 
+import com.tradecamp.models.dto.UserDto;
 import com.tradecamp.models.dto.UserDtoGet;
-import com.tradecamp.models.model.entity.User;
 import com.tradecamp.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userService.find(UserDtoGet.builder()
+        UserDto user = userService.find(UserDtoGet.builder()
                 .name(username)
                 .build());
         return new MyUserPrincipal(user);

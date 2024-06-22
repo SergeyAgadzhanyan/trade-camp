@@ -1,7 +1,7 @@
 package com.tradecamp.stock.mapper;
 
 import com.tradecamp.models.dto.StockDataDto;
-import com.tradecamp.models.model.entity.StockData;
+import com.tradecamp.stock.entity.StockData;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.HistoricCandle;
 

@@ -2,28 +2,22 @@ package com.tradecamp.models.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.tradecamp.models.exception.BadRequestException;
 import com.tradecamp.models.model.RabbitResposne;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Slf4j
-@RequiredArgsConstructor
-@Service
 public class RabbitUtil {
-    private final ObjectMapper objectMapper;
-    private final Gson gson;
+    private static final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     public static String makeJsonError(int code) {
-        return "{ \"message\": " + "\" Internal error \","  + "\"code\": " + code + "}";
+        return "{ \"message\": " + "\" Internal error \"," + "\"code\": " + code + "}";
     }
 
-    public <T> T fromMessageResponseToObject(Message message, Class<T> valueType) {
+    public static <T> T fromMessageResponseToObject(Message message, Class<T> valueType) {
         T result;
         if (message != null && message.getBody() != null) {
             try {
@@ -46,7 +40,7 @@ public class RabbitUtil {
         return result;
     }
 
-    public <T> T fromMessageRequesteToObject(Message message, Class<T> valueType) {
+    public static <T> T fromMessageRequesteToObject(Message message, Class<T> valueType) {
         T result;
         if (message != null && message.getBody() != null) {
             try {
@@ -63,7 +57,7 @@ public class RabbitUtil {
         return result;
     }
 
-    public RabbitResposne fromMessageToResponse(Message message) {
+    public static RabbitResposne fromMessageToResponse(Message message) {
         if (message != null && message.getBody() != null) {
             try {
                 return objectMapper.readValue(message.getBody(), RabbitResposne.class);
@@ -76,7 +70,7 @@ public class RabbitUtil {
         }
     }
 
-    public RabbitResposne fromObjectToResponse(Object o) {
+    public static RabbitResposne fromObjectToResponse(Object o) {
         RabbitResposne rabbitResposne;
         try {
             rabbitResposne = new RabbitResposne(objectMapper.writeValueAsString(o), 200);
@@ -87,7 +81,7 @@ public class RabbitUtil {
         return rabbitResposne;
     }
 
-    public Message fromResponseToMessage(RabbitResposne resposne) {
+    public static Message fromResponseToMessage(RabbitResposne resposne) {
         try {
             return new Message(objectMapper.writeValueAsBytes(resposne));
         } catch (JsonProcessingException e) {

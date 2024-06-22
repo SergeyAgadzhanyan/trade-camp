@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.tradecamp.models.util.RabbitUtil.makeJsonError;
+import static com.tradecamp.models.util.RabbitUtil.*;
 import static com.tradecamp.models.util.RabbitVar.STOCK_RANDOM_QUEUE;
 
 @Service
@@ -23,8 +23,6 @@ import static com.tradecamp.models.util.RabbitVar.STOCK_RANDOM_QUEUE;
 @Slf4j
 public class StockConsumer {
     private final StockService stockService;
-    private final RabbitUtil rabbitUtil;
-
     public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
         //todo Реализовать метод
         return List.of();
@@ -33,11 +31,11 @@ public class StockConsumer {
     @RabbitListener(queues = STOCK_RANDOM_QUEUE)
     public Message getRandomStockData(Message message) {
         try {
-            StockRandomRequest stockRandomRequest = rabbitUtil.fromMessageRequesteToObject(message, StockRandomRequest.class);
+            StockRandomRequest stockRandomRequest = fromMessageRequesteToObject(message, StockRandomRequest.class);
             List<StockDataDto> randomStockData = stockService
                     .getRandomStockData(stockRandomRequest.getSum());
-            RabbitResposne rabbitResposne = rabbitUtil.fromObjectToResponse(randomStockData);
-            return rabbitUtil.fromResponseToMessage(rabbitResposne);
+            RabbitResposne rabbitResposne = fromObjectToResponse(randomStockData);
+            return fromResponseToMessage(rabbitResposne);
         } catch (Exception e) {
             return new Message(makeJsonError(400).getBytes());
         }
