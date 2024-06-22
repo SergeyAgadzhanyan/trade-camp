@@ -1,4 +1,4 @@
-package com.example.backend.exception;
+package com.tradecamp.stock.exception;
 
 import com.tradecamp.models.exception.BadRequestException;
 import com.tradecamp.models.exception.ResourceNotFound;

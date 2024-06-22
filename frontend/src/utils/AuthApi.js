@@ -1,10 +1,10 @@
 import Api from './Api';
 import Text from './text';
 
+
 class AuthApi extends Api {
 
   signUp({name, password}) {
-
     return fetch(Text.LinkSignUp, {
       method: 'POST',
       body: JSON.stringify({

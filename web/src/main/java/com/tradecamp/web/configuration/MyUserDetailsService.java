@@ -1,7 +1,7 @@
 package com.tradecamp.web.configuration;
 
 import com.tradecamp.models.dto.UserDtoGet;
-import com.tradecamp.models.model.User;
+import com.tradecamp.models.model.entity.User;
 import com.tradecamp.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

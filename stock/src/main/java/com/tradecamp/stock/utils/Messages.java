@@ -1,4 +1,4 @@
-package com.example.backend.utils;
+package com.tradecamp.stock.utils;
 
 import org.springframework.util.StringUtils;
 

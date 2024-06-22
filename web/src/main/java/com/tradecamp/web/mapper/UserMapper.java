@@ -4,7 +4,7 @@ package com.tradecamp.web.mapper;
 import com.tradecamp.models.dto.UserDto;
 import com.tradecamp.models.dto.UserDtoCreate;
 import com.tradecamp.models.dto.UserDtoGet;
-import com.tradecamp.models.model.User;
+import com.tradecamp.models.model.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

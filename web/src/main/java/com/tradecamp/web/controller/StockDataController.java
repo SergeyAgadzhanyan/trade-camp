@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/data")
 @Validated
 public class StockDataController {
-    StockDataService service;
+    private final StockDataService service;
 
     @GetMapping
     public List<StockDataDto> getData(@RequestParam @Size(min = 3, max = 6) String name,

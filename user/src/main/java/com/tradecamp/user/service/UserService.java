@@ -2,7 +2,7 @@ package com.tradecamp.user.service;
 
 import com.tradecamp.models.dto.UserDtoGet;
 import com.tradecamp.models.exception.ResourceNotFound;
-import com.tradecamp.models.model.User;
+import com.tradecamp.models.model.entity.User;
 import com.tradecamp.user.repository.UserRepository;
 import com.tradecamp.user.utils.Messages;
 import lombok.RequiredArgsConstructor;

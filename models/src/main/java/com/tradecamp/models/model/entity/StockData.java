@@ -1,4 +1,4 @@
-package com.tradecamp.models.model;
+package com.tradecamp.models.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

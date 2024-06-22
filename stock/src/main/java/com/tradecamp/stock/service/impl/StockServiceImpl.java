@@ -1,7 +1,8 @@
-package com.example.backend.service;
+package com.tradecamp.stock.service.impl;
 
-import com.example.backend.mapper.StockDataMapper;
-import com.example.backend.storage.StockDataStorage;
+import com.tradecamp.stock.mapper.StockDataMapper;
+import com.tradecamp.stock.service.StockService;
+import com.tradecamp.stock.storage.StockDataStorage;
 import com.tradecamp.models.dto.StockDataDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,24 +22,28 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class StockDataService {
+public class StockServiceImpl implements StockService {
     @Value("${tinkoff.token}")
     private String token;
     private final StockDataStorage storage;
     private final StockDataMapper mapper;
 
+    @Override
     public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
         return storage.findByNameAndDateBetween(name, from, to, Sort.by("date")).stream()
                 .map(mapper::toDto).collect(Collectors.toList());
     }
 
-    public List<StockDataDto> getRandomStockData() {
+    @Override
+    public List<StockDataDto> getRandomStockData(int sum) {
         var api = InvestApi.create(token);
-        var from = Instant.now().minus(30, ChronoUnit.DAYS);
+        //todo поменять дни на динамическое значение
+        var from = Instant.now().minus(sum, ChronoUnit.DAYS);
         var to = Instant.now();
 
         List<HistoricCandle> candles;
         try {
+            //todo поменять instrumentId на динамическое значение
             candles =
                     api.getMarketDataService().getCandles("e6123145-9665-43e0-8413-cd61b8aa9b13", from, to,
                             CandleInterval.CANDLE_INTERVAL_DAY).get();

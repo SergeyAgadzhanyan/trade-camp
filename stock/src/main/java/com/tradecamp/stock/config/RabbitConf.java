@@ -1,4 +1,4 @@
-package com.tradecamp.user.config;
+package com.tradecamp.stock.config;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

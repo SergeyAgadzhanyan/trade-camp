@@ -1,6 +1,6 @@
 package com.tradecamp.web.configuration;
 
-import com.tradecamp.models.model.User;
+import com.tradecamp.models.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

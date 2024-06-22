@@ -6,8 +6,8 @@ import com.tradecamp.models.dto.UserDtoCreate;
 import com.tradecamp.models.dto.UserDtoGet;
 import com.tradecamp.models.exception.BadRequestException;
 import com.tradecamp.models.model.RabbitResposne;
-import com.tradecamp.models.model.User;
-import com.tradecamp.web.utils.WebRabbitUtil;
+import com.tradecamp.models.model.entity.User;
+import com.tradecamp.models.util.RabbitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -24,16 +24,16 @@ public class UserService {
     private final ObjectMapper objectMapper;
 
     private final RabbitTemplate rabbitTemplate;
-    private final WebRabbitUtil webRabbitUtil;
+    private final RabbitUtil rabbitUtil;
     private final PasswordEncoder passwordEncoder;
 
 
     public User create(UserDtoCreate userDtoCreate) {
         userDtoCreate.setPassword(passwordEncoder.encode(userDtoCreate.getPassword()));
         try {
-            Message messageFromRm = rabbitTemplate.sendAndReceive(EXCHANGE_USER, ROUTING_KEY_CREATE_USER,
+            Message messageFromRm = rabbitTemplate.sendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY_CREATE,
                     new Message(objectMapper.writeValueAsString(userDtoCreate).getBytes()));
-            return webRabbitUtil.convertMessage(messageFromRm, User.class);
+            return rabbitUtil.fromMessageResponseToObject(messageFromRm, User.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -45,9 +45,9 @@ public class UserService {
 
     public User find(UserDtoGet userDtoGet) {
         try {
-            Message messageFromRm = rabbitTemplate.sendAndReceive(EXCHANGE_USER, ROUTING_KEY_FIND_USER,
+            Message messageFromRm = rabbitTemplate.sendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY_FIND,
                     new Message(objectMapper.writeValueAsString(userDtoGet).getBytes()));
-            return webRabbitUtil.convertMessage(messageFromRm, User.class);
+            return rabbitUtil.fromMessageResponseToObject(messageFromRm, User.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -59,9 +59,9 @@ public class UserService {
 
     private void delete(UserDtoGet userDtoGet) {
         try {
-            Message messageFromRm = rabbitTemplate.sendAndReceive(EXCHANGE_USER, ROUTING_KEY_DELETE_USER,
+            Message messageFromRm = rabbitTemplate.sendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY_DELETE,
                     new Message(objectMapper.writeValueAsString(userDtoGet).getBytes()));
-            RabbitResposne rabbitResposne = webRabbitUtil.convertMessageToResponse(messageFromRm);
+            RabbitResposne rabbitResposne = rabbitUtil.fromMessageToResponse(messageFromRm);
             if (rabbitResposne.getCode() != 200) {
                 throw new BadRequestException(rabbitResposne.getMessage());
             }
