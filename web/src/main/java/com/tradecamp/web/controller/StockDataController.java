@@ -1,8 +1,7 @@
 package com.tradecamp.web.controller;
 
 
-import com.tradecamp.web.dto.StockDataDto;
-import com.tradecamp.web.service.RabbitMQProducerService;
+import com.tradecamp.models.dto.StockDataDto;
 import com.tradecamp.web.service.StockDataService;
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.List;
 @RequestMapping("/data")
 @Validated
 public class StockDataController {
-    StockDataService service;
+    private final StockDataService service;
 
     @GetMapping
     public List<StockDataDto> getData(@RequestParam @Size(min = 3, max = 6) String name,

@@ -3,7 +3,7 @@ export default {
   SIGNUP: 'SIGN UP',
   CreateNewAcc: 'Create new account',
   AlreadyHave: 'Already have account?',
-  LinkSignIn: 'http://localhost:8080/perform_login',
-  LinkSignUp: 'http://localhost:8080/user',
-  LinkCheckMe: 'http://localhost:8080/user/me',
+  LinkSignIn: 'http://localhost:8083/perform_login',
+  LinkSignUp: 'http://localhost:8083/user',
+  LinkCheckMe: 'http://localhost:8083/user/me',
 };

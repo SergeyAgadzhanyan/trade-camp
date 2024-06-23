@@ -1,6 +1,6 @@
 package com.tradecamp.web.configuration;
 
-import com.tradecamp.web.dto.UserDto;
+import com.tradecamp.models.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

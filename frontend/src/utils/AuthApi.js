@@ -1,10 +1,10 @@
 import Api from './Api';
 import Text from './text';
 
+
 class AuthApi extends Api {
 
   signUp({name, password}) {
-
     return fetch(Text.LinkSignUp, {
       method: 'POST',
       body: JSON.stringify({
@@ -21,8 +21,8 @@ class AuthApi extends Api {
 
   signIn({user, pass}) {
     const params = new URLSearchParams({
-      'user': user,
-      'pass': pass,
+      'username': user,
+      'password': pass,
     });
     return fetch(Text.LinkSignIn, {
       method: 'POST',

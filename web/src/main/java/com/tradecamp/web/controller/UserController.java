@@ -1,10 +1,11 @@
 package com.tradecamp.web.controller;
 
-import com.tradecamp.web.dto.UserDto;
-import com.tradecamp.web.dto.UserDtoCreate;
-import com.tradecamp.web.dto.UserDtoGet;
+import com.tradecamp.models.dto.UserDto;
+import com.tradecamp.models.dto.UserDtoCreate;
 import com.tradecamp.web.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -20,17 +21,19 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDtoCreate u) {
-        return userService.create(u);
+    public UserDto create(@Valid @RequestBody UserDtoCreate userDtoCreate) {
+        return userService.create(userDtoCreate);
     }
 
     @GetMapping
-    public UserDto find(@Valid @RequestBody UserDtoGet u) {
-        return userService.find(u);
+    public UserDto get(@RequestParam @NotBlank @Size(min = 3) String name) {
+        return userService.getByName(name);
     }
 
-    @GetMapping("/me")
-    public UserDto getMe() {
-        return userService.getMe();
+    @DeleteMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@RequestParam @NotBlank @Size(min = 3) String name) {
+        userService.deleteByName(name);
     }
+
 }

@@ -91,10 +91,10 @@ function Login() {
                       ? 'animate__backInRight'
                       : 'animate__backInLeft'} `}
                   onClick={handleLinkClick}>{linkName}</button>
-
         </form>
       </div>
   );
+
 }
 
 export default Login;
