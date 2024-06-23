@@ -1,6 +1,6 @@
 import {stockData} from './stockData';
 import NotAuthError from '../error/NotAuthError';
-import Links from './links.js'
+import Links from './links.js';
 
 const arrayData = stockData.split('\n');
 arrayData.pop();
@@ -12,7 +12,9 @@ export async function makeRandomCandleRange(dataCount, range) {
         method: 'GET',
         credentials: 'include',
       }).then(res => {
-    if (res.status === 401) throw new NotAuthError('fail login', res.url);
+    if (res.status === 401) {
+      throw new NotAuthError('fail login', res.url);
+    }
     return res.json();
   }).then(body => {
     body.forEach(e => {

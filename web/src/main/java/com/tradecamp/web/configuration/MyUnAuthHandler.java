@@ -16,8 +16,6 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class MyUnAuthHandler implements AuthenticationFailureHandler, AuthenticationEntryPoint {
-
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

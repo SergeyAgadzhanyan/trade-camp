@@ -1,5 +1,8 @@
 @import "./vendor/normalize.css";
 @import "./vendor/fonts/Inter/inter.css";
+@import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import 'bootstrap/dist/css/bootstrap.min.css';
 @import "./blocks/header/header.css";
 @import "./blocks/header/__button/header__button.css";
 @import "./blocks/header/__button-icon/header__button-icon.css";
@@ -20,8 +23,19 @@
 /*@import "./blocks/login/__form/login__form.css";*/
 /*@import "./blocks/login/__button/login__button.css";*/
 /*@import "./blocks/login/__button-link/login__button-link.css";*/
-/*@import "./blocks/login/__title/login__title.css";*/
+/*@import "./blocks/login/__title/login__input.css";*/
 /*@import "./blocks/login/__input/login__input.css";*/
 @import "./blocks/popup/popup.css";
 @import "./blocks/popup/_opened/popup_opened.css";
 @import "./blocks/popup/_profile/popup_profile.css";
+@import "./blocks/login/login.css";
+@import "./blocks/login/__form/login__form.css";
+@import "./blocks/login/__button/login__button.css";
+@import "./blocks/login/__button-link/login__button-link.css";
+@import "./blocks/login/__input/login__input.css";
+@import "./blocks/login/__title/login__title.css";
+@import "./blocks/login/__gradient-custom/login__gradient-custom.css";
+
+
+
+

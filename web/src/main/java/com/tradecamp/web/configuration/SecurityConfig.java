@@ -1,5 +1,7 @@
 package com.tradecamp.web.configuration;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final MySuccessLoginHandler mySuccessLoginHandler;
+    private final MyUnAuthHandler myUnAuthHandler;
+
+    @Value("${loginUrl}")
+    private String loginUrl;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -32,14 +41,13 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
-                //при добавлении кастомного обработчика пропадает дефолтная страница логина
-//                .exceptionHandling(e -> e.authenticationEntryPoint(new MyUnAuthHandler()))
+                .exceptionHandling(e -> e.authenticationEntryPoint(myUnAuthHandler))
                 .formLogin(form -> form
                         .loginProcessingUrl("/perform_login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .successHandler(new MySuccessLoginHandler())
-                        .failureHandler(new MyUnAuthHandler()));
+                        .successHandler(mySuccessLoginHandler)
+                        .failureHandler(myUnAuthHandler));
         return http.build();
     }
 }
