@@ -34,7 +34,7 @@ export async function makeRandomCandleRange(dataCount, range) {
     }
     console.log(e);
   });
-  return candles.reverse();
+  return candles;
 }
 
 

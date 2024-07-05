@@ -1,9 +1,7 @@
 package com.tradecamp.stock.service;
 
 import com.tradecamp.models.dto.StockDataDto;
-import com.tradecamp.models.model.RabbitResposne;
 import com.tradecamp.models.model.StockRandomRequest;
-import com.tradecamp.models.util.RabbitUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -23,6 +21,7 @@ import static com.tradecamp.models.util.RabbitVar.STOCK_RANDOM_QUEUE;
 @Slf4j
 public class StockConsumer {
     private final StockService stockService;
+
     public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
         //todo Реализовать метод
         return List.of();
@@ -34,10 +33,9 @@ public class StockConsumer {
             StockRandomRequest stockRandomRequest = fromMessageRequesteToObject(message, StockRandomRequest.class);
             List<StockDataDto> randomStockData = stockService
                     .getRandomStockData(stockRandomRequest.getSum());
-            RabbitResposne rabbitResposne = fromObjectToResponse(randomStockData);
-            return fromResponseToMessage(rabbitResposne);
+            return fromResponseToMessage(fromObjectToResponse(randomStockData));
         } catch (Exception e) {
-            return new Message(makeJsonError(400).getBytes());
+            return new Message(makeJsonError(new String(message.getBody()), 400).getBytes());
         }
     }
 

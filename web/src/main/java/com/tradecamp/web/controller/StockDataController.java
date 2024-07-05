@@ -30,10 +30,6 @@ public class StockDataController {
                                       @RequestParam @PastOrPresent LocalDateTime to) {
         return service.getStockData(name, from, to);
     }
-    @GetMapping("/test")
-    public String test(){
-        return "OK";
-    }
 
     @GetMapping("/random")
     public List<StockDataDto> getRandomData(@RequestParam @Min(100) @Max(200) Integer sum) {
