@@ -13,32 +13,18 @@ import java.io.IOException;
 public class RabbitUtil {
     private static final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
-    public static String makeJsonError(int code) {
-        return "{ \"message\": " + "\" Internal error \"," + "\"code\": " + code + "}";
+    public static String makeJsonError(String message, int code) {
+        return "{ \"message\": " + message + "\", code\": " + code + "}";
     }
 
     public static <T> T fromMessageResponseToObject(Message message, Class<T> valueType) {
-        T result;
-        if (message != null && message.getBody() != null) {
-            try {
-                RabbitResposne rabbitResposne = objectMapper.readValue(message.getBody(), RabbitResposne.class);
-                if (rabbitResposne.getCode() == 200) {
-                    result = objectMapper.readValue(rabbitResposne.getMessage(), valueType);
-                } else {
-                    log.error("Error from UserService: {}", rabbitResposne.getMessage());
-                    throw new BadRequestException(rabbitResposne.getMessage());
-                }
-            } catch (IOException e) {
-                log.error("Error while parsing UserDto", e);
-                throw new RuntimeException(e);
-            }
-        } else {
-            log.error("Received request has wrong format: {}", message);
-            throw new BadRequestException("Response from rabbit has wrong format or empty body");
-        }
+
+        RabbitResposne rabbitResposne = fromMessageToResponse(message);
+        T result = getObjectClassFromResponse(valueType, rabbitResposne);
         log.info("Received object: {}", result);
         return result;
     }
+
 
     public static <T> T fromMessageRequesteToObject(Message message, Class<T> valueType) {
         T result;
@@ -85,7 +71,22 @@ public class RabbitUtil {
         try {
             return new Message(objectMapper.writeValueAsBytes(resposne));
         } catch (JsonProcessingException e) {
-            return new Message(makeJsonError(300).getBytes());
+            return new Message(makeJsonError(resposne.getMessage(), 500).getBytes());
         }
+    }
+
+    private static <T> T getObjectClassFromResponse(Class<T> valueType, RabbitResposne rabbitResposne) {
+        T result;
+        if (rabbitResposne.getCode() == 200) {
+            try {
+                result = objectMapper.readValue(rabbitResposne.getMessage(), valueType);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            log.error("Error from UserService: {}", rabbitResposne.getMessage());
+            throw new BadRequestException(rabbitResposne.getMessage());
+        }
+        return result;
     }
 }

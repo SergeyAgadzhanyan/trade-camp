@@ -33,7 +33,7 @@ public class UserConsumer {
             return fromResponseToMessage(rabbitResposne);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new Message(makeJsonError(400).getBytes());
+            return new Message(makeJsonError(new String(message.getBody()), 400).getBytes());
         }
     }
 
@@ -47,7 +47,7 @@ public class UserConsumer {
             return fromResponseToMessage(rabbitResposne);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new Message(makeJsonError(400).getBytes());
+            return new Message(makeJsonError(new String(message.getBody()), 400).getBytes());
         }
     }
 
@@ -60,7 +60,7 @@ public class UserConsumer {
             return fromResponseToMessage(rabbitResposne);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new Message(makeJsonError(400).getBytes());
+            return new Message(makeJsonError(new String(message.getBody()), 400).getBytes());
         }
     }
 
