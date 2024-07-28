@@ -7,13 +7,11 @@ import com.tradecamp.stock.service.StockService;
 import com.tradecamp.stock.storage.StockDataStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.CandleInterval;
 import ru.tinkoff.piapi.contract.v1.HistoricCandle;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
@@ -23,15 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 public class StockServiceImpl implements StockService {
-    private final StockDataStorage storage;
-    private final StockDataMapper mapper;
+    private final StockDataMapper mapperMapStruct;
     private final StockApi stockApi;
-
-    @Override
-    public List<StockDataDto> getStockData(String name, LocalDateTime from, LocalDateTime to) {
-        return storage.findByNameAndDateBetween(name, from, to, Sort.by("date")).stream()
-                .map(mapper::toDto).collect(Collectors.toList());
-    }
 
     @Override
     public List<StockDataDto> getRandomStockData(int sum) {
@@ -46,7 +37,7 @@ public class StockServiceImpl implements StockService {
             log.error(e);
             throw new RuntimeException(e);
         }
-        return candles.stream().map(mapper::toDto).collect(Collectors.toList());
+        return candles.stream().map(mapperMapStruct::toDto).collect(Collectors.toList());
     }
 
     private static RandomRange getRandomRange(int sum) {

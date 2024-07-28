@@ -1,38 +1,30 @@
 package com.tradecamp.stock.mapper;
 
+import com.google.protobuf.Timestamp;
 import com.tradecamp.models.dto.StockDataDto;
 import com.tradecamp.stock.entity.StockData;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.tinkoff.piapi.contract.v1.HistoricCandle;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Component
-public class StockDataMapper {
-    public StockDataDto toDto(HistoricCandle candle) {
-        return StockDataDto.builder()
-                .name("APPLE")
-                .open(String.valueOf(candle.getOpen().getUnits()))
-                .close(String.valueOf(candle.getClose().getUnits()))
-                .low(String.valueOf(candle.getLow().getUnits()))
-                .high(String.valueOf(candle.getHigh().getUnits()))
-                .date(LocalDateTime.ofInstant(Instant.ofEpochMilli(candle.getTime().getSeconds() * 1000), ZoneId.of(
-                        "UTC")))
-                .volume(candle.getVolume())
-                .build();
+@Mapper(componentModel = "spring")
+public interface StockDataMapper {
+    @Mapping(target = "name", constant = "APPLE")
+    @Mapping(target = "open", source = "candle.open.units")
+    @Mapping(target = "close", source = "candle.close.units")
+    @Mapping(target = "low", source = "candle.low.units")
+    @Mapping(target = "high", source = "candle.high.units")
+    @Mapping(target = "date", expression = "java(getDate(candle.getTime()))")
+    StockDataDto toDto(HistoricCandle candle);
+
+    default LocalDateTime getDate(Timestamp timestamp) {
+        return LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(timestamp.getSeconds() * 1000), ZoneId.of("UTC"));
     }
 
-    public StockDataDto toDto(StockData s) {
-        return StockDataDto.builder()
-                .name(s.getName())
-                .open(s.getOpen())
-                .close(s.getClose())
-                .low(s.getLow())
-                .high(s.getHigh())
-                .date(s.getDate())
-                .volume(s.getVolume())
-                .build();
-    }
+    StockDataDto toDto(StockData s);
 }
