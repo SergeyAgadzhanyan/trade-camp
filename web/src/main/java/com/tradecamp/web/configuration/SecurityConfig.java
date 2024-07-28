@@ -17,9 +17,6 @@ public class SecurityConfig {
     private final MySuccessLoginHandler mySuccessLoginHandler;
     private final MyUnAuthHandler myUnAuthHandler;
 
-    @Value("${loginUrl}")
-    private String loginUrl;
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

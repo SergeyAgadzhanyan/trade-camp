@@ -2,6 +2,7 @@ package com.tradecamp.web.controller;
 
 import com.tradecamp.models.dto.UserDto;
 import com.tradecamp.models.dto.UserDtoCreate;
+import com.tradecamp.models.dto.UserDtoGet;
 import com.tradecamp.web.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDtoCreate userDtoCreate) {
+    public UserDtoGet create(@Valid @RequestBody UserDtoCreate userDtoCreate) {
         return userService.create(userDtoCreate);
     }
 

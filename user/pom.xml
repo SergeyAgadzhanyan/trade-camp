@@ -60,6 +60,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.tradecamp.models</groupId>
             <artifactId>models</artifactId>
             <version>0.0.1-SNAPSHOT</version>

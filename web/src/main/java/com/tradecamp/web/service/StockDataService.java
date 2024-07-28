@@ -1,13 +1,16 @@
 package com.tradecamp.web.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradecamp.models.dto.StockDataDto;
-import com.tradecamp.models.model.StockRandomRequest;
-import com.tradecamp.models.util.RabbitUtil;
+import com.tradecamp.models.model.RabbitRequest;
+import com.tradecamp.models.model.RabbitRequestType;
+import com.tradecamp.models.model.RabbitResponse;
+import com.tradecamp.web.exception.ErrorMessages;
+import com.tradecamp.web.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.tradecamp.models.util.RabbitVar.STOCK_EXCHANGE;
-import static com.tradecamp.models.util.RabbitVar.STOCK_ROUTING_KEY_RANDOM;
+import static com.tradecamp.models.util.RabbitVar.STOCK_ROUTING_KEY;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +38,21 @@ public class StockDataService {
 
     public List<StockDataDto> getRandomStockData(int sum) {
         try {
-            StockRandomRequest stockRandomRequest = StockRandomRequest.builder().sum(sum).build();
-            Message receive = rabbitTemplate.sendAndReceive(STOCK_EXCHANGE, STOCK_ROUTING_KEY_RANDOM,
-                    new Message(objectMapper.writeValueAsString(stockRandomRequest).getBytes()));
-            return RabbitUtil.fromMessageResponseToObject(receive, (Class<List<StockDataDto>>) (Object) List.class);
 
+
+            RabbitRequest request = RabbitRequest.builder()
+                    .type(RabbitRequestType.STOCK_RANDOM)
+                    .message(String.valueOf(sum)).build();
+
+            String response = (String) rabbitTemplate.convertSendAndReceive(STOCK_EXCHANGE,
+                    STOCK_ROUTING_KEY,
+                    objectMapper.writeValueAsString(request));
+            RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
+            if (rabbitResponse.getCode() != 200) {
+                throw new GlobalException(ErrorMessages.INTERNAL_SERVER_ERROR);
+            }
+            return objectMapper.readValue(rabbitResponse.getBody(), new TypeReference<List<StockDataDto>>() {
+            });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
