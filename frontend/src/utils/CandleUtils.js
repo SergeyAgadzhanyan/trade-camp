@@ -1,22 +1,17 @@
 import {stockData} from './stockData';
+import StockApi from './StockApi';
 import NotAuthError from '../error/NotAuthError';
-import Links from './links.js';
 
 const arrayData = stockData.split('\n');
 arrayData.pop();
 
 export async function makeRandomCandleRange(dataCount, range) {
   let candles = [];
-  await fetch(
-      `${Links.linkStockRandom}?sum=${dataCount + range}`, {
-        method: 'GET',
-        credentials: 'include',
-      }).then(res => {
-    if (res.status === 401) {
-      throw new NotAuthError('fail login', res.url);
-    }
-    return res.json();
-  }).then(body => {
+  try {
+
+    const jsonR = await StockApi.randomCandleRange({dataCount, range});
+    const body = await jsonR.json();
+
     body.forEach(e => {
       const open = parseFloat(e.open.substring(1));
       const high = parseFloat(e.high.substring(1));
@@ -27,14 +22,14 @@ export async function makeRandomCandleRange(dataCount, range) {
         y: [open, high, low, close],
       });
     });
-  }).catch(e => {
+    return candles;
+  } catch (e) {
     if (e instanceof NotAuthError) {
       window.location = 'http://localhost:3000/login';
-      return candles;
+    } else {
+      console.error(e);
     }
-    console.log(e);
-  });
-  return candles;
+  }
 }
 
 

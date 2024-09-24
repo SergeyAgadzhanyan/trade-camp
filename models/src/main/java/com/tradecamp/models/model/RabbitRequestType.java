@@ -4,5 +4,6 @@ public enum RabbitRequestType {
     USER_FIND,
     USER_CREATE,
     USER_DELETE,
-    STOCK_RANDOM
+    USER_SET_TRADE_RESULT,
+    STOCK_RANDOM,
 }

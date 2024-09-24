@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.tradecamp.models.util.RabbitVar.*;
 
+
 @Configuration
 public class RabbitConfig {
 

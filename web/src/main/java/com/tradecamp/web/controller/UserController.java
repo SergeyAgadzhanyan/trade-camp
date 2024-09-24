@@ -1,8 +1,6 @@
 package com.tradecamp.web.controller;
 
-import com.tradecamp.models.dto.UserDto;
-import com.tradecamp.models.dto.UserDtoCreate;
-import com.tradecamp.models.dto.UserDtoGet;
+import com.tradecamp.models.dto.*;
 import com.tradecamp.web.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +33,11 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     public void delete(@RequestParam @NotBlank @Size(min = 3) String name) {
         userService.deleteByName(name);
+    }
+
+    @PostMapping("/stat")
+    public TradeResultResponse setStat(@RequestBody TradeResultRequest tradeResultRequest) {
+        return userService.setTradeResult(tradeResultRequest);
     }
 
 }

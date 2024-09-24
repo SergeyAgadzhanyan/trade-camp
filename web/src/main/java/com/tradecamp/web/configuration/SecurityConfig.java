@@ -1,15 +1,15 @@
 package com.tradecamp.web.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,19 +22,15 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
+    //todo ошибка в корсах,не пропускает запроса с фронта. например на создание пользователя
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .headers(h -> h
-                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Origin",
-                                "http://localhost:3000"))
-                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Methods",
-                                "POST, PUT, GET, OPTIONS, DELETE"))
-                        .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true")))
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/perform_login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .anyRequest()
                         .authenticated()
                 )

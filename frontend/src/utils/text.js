@@ -6,4 +6,5 @@ export default {
   LinkSignIn: 'http://localhost:8083/perform_login',
   LinkSignUp: 'http://localhost:8083/user',
   LinkCheckMe: 'http://localhost:8083/user/me',
+  TradeResult: 'http://localhost:8083/user/stat',
 };

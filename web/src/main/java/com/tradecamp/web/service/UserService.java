@@ -2,22 +2,24 @@ package com.tradecamp.web.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tradecamp.models.dto.UserDto;
-import com.tradecamp.models.dto.UserDtoCreate;
-import com.tradecamp.models.dto.UserDtoGet;
+import com.tradecamp.models.dto.*;
+import com.tradecamp.models.exception.ApplicationException;
 import com.tradecamp.models.model.RabbitRequest;
 import com.tradecamp.models.model.RabbitRequestType;
 import com.tradecamp.models.model.RabbitResponse;
-import com.tradecamp.web.exception.ErrorMessages;
-import com.tradecamp.web.exception.GlobalException;
+import com.tradecamp.models.util.Messages;
+import com.tradecamp.web.configuration.MyUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.tradecamp.models.util.RabbitVar.USER_EXCHANGE;
 import static com.tradecamp.models.util.RabbitVar.USER_ROUTING_KEY;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +42,7 @@ public class UserService {
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
             if (rabbitResponse.getCode() != 201) {
-                throw new GlobalException(ErrorMessages.INTERNAL_SERVER_ERROR);
+                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), UserDtoGet.class);
         } catch (JsonProcessingException e) {
@@ -61,7 +63,7 @@ public class UserService {
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
             if (rabbitResponse.getCode() != 200) {
-                throw new GlobalException(ErrorMessages.INTERNAL_SERVER_ERROR);
+                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), UserDto.class);
         } catch (JsonProcessingException e) {
@@ -85,8 +87,28 @@ public class UserService {
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
 
             if (rabbitResponse.getCode() != 204) {
-                throw new GlobalException(ErrorMessages.INTERNAL_SERVER_ERROR);
+                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public TradeResultResponse setTradeResult(TradeResultRequest tradeResultRequest) {
+        try {
+            MyUserPrincipal currentUser = (MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            tradeResultRequest.setUserName(currentUser.getUsername());
+            RabbitRequest request = RabbitRequest.builder()
+                    .type(RabbitRequestType.USER_SET_TRADE_RESULT)
+                    .message(objectMapper.writeValueAsString(tradeResultRequest))
+                    .build();
+            String response = (String) rabbitTemplate.convertSendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY,
+                    objectMapper.writeValueAsString(request));
+            RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
+            if (rabbitResponse.getCode() != 200) {
+                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return objectMapper.readValue(rabbitResponse.getBody(), TradeResultResponse.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -1,11 +1,11 @@
-
 export function checkByWinningPrice({
+  startPrice,
   currentPrice,
   index,
   winningPrice,
   losePrice,
   action,
-    resultFunction
+  resultFunction,
 }) {
   let isWin = true;
   let isContinue = true;
@@ -24,7 +24,8 @@ export function checkByWinningPrice({
     isContinue = false;
   }
   if (!isContinue) {
-    resultFunction({isWin, index, action});
+    let tradeResult = Math.abs(currentPrice - startPrice) * (isWin ? 1 : -1);
+    resultFunction({isWin, index, action, tradeResult});
   }
 
   return isContinue;

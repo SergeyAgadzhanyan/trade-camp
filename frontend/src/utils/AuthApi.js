@@ -14,7 +14,7 @@ class AuthApi extends Api {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
+      credentials: "include",
     })
         .then(this._checkResponse);
   }
@@ -37,7 +37,6 @@ class AuthApi extends Api {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include',
     }).then(this._checkResponse);
   }
 }
