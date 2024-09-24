@@ -7,6 +7,7 @@ import Result from './components/result';
 import ActionButtons from './components/actionButtons';
 import ProfilePopup from './components/profilePopup';
 import Header from './components/header';
+import UserApi from './utils/UserApi';
 
 function App() {
   const [rangeForTrading, setRangeForTrading] = React.useState(30);
@@ -47,7 +48,7 @@ function App() {
     });
   }
 
-  function setNewSeriesWithTradeResult({isWin, index, action}) {
+  function setNewSeriesWithTradeResult({isWin, index, action, tradeResult}) {
 
     const dataOne = shortSeries[shortSeries.length - 1];
     const dataTwo = fullSeries[index];
@@ -67,7 +68,33 @@ function App() {
         }));
     setIsShowResult(true);
     setIsWin(isWin);
+    sendTradeResult({
+      name: 'APPL',
+      startDate: new Date(dateOne).toISOString(),
+      endDate: new Date(dateTwo).toISOString(),
+      currency: 'USD',
+      score: tradeResult,
+      operation: action.toUpperCase(),
+    });
 
+  }
+
+  function sendTradeResult({
+    name,
+    startDate,
+    endDate,
+    currency,
+    score,
+    operation,
+  }) {
+    UserApi.sendTradeResult(
+        {name, startDate, endDate, currency, score, operation}).then(result => {
+      if (result.ok) {
+        result.json().then(result => {
+          console.log(`Data was successful sending.Score is ${result.score}`);
+        });
+      }
+    });
   }
 
   function restart() {
@@ -96,6 +123,7 @@ function App() {
           ? fullSeries[index]['y'][1]
           : fullSeries[index]['y'][2];
       const isContinue = checkByWinningPrice({
+        startPrice: lastPrice,
         currentPrice,
         index,
         winningPrice: parseFloat(winningPrice),

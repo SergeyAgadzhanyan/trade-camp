@@ -19,6 +19,7 @@ public interface UserMapper {
     UserDto toDto(User user);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "startScore", constant = "10000")
     User toEntity(UserDtoCreate userDto);
 }
 

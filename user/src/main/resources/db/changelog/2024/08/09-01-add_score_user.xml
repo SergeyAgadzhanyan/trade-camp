@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
+    <changeSet id="09-01-add_score_user" author="Sergey Agadzhanyan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="users" columnName="score"/>
+                <columnExists tableName="users" columnName="start_score"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="users">
+            <column name="score" type="numeric(7,2)"/>
+            <column name="start_score" type="numeric(7,2)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="09-01-fill_score_columns" author="Sergey Agadzhanyan">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="users" columnName="score"/>
+            <columnExists tableName="users" columnName="start_score"/>
+        </preConditions>
+        <update tableName="users">
+            <column name="score" value="100"/>
+            <column name="start_score" value="100"/>
+        </update>
+    </changeSet>
+</databaseChangeLog>

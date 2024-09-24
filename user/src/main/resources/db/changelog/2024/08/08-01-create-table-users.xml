@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
 
     <changeSet id="08-01-create-table-users" author="Sergey.Agadzhanyan">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="users"/>
             </not>

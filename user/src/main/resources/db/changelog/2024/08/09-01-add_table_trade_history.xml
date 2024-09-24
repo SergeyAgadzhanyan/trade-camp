@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
+    <changeSet id="09-01-add_table_trade_history" author="Sergey Agadzhanyan">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="trade_history"/>
+            </not>
+        </preConditions>
+        <createTable tableName="trade_history">
+            <column name="id" autoIncrement="true" type="serial">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints foreignKeyName="fk_user" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="start_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="varchar(4)"/>
+            <column name="operation" type="varchar(4)"/>
+            <column name="trade_result" type="numeric(7,2)"/>
+            <column name="score_result" type="numeric(7,2)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

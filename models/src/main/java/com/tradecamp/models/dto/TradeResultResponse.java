@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private String name;
-    private String password;
+public class TradeResultResponse {
+    private BigDecimal score;
     private BigDecimal startScore;
 }

@@ -4,14 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradecamp.models.dto.StockDataDto;
+import com.tradecamp.models.exception.ApplicationException;
 import com.tradecamp.models.model.RabbitRequest;
 import com.tradecamp.models.model.RabbitRequestType;
 import com.tradecamp.models.model.RabbitResponse;
-import com.tradecamp.web.exception.ErrorMessages;
-import com.tradecamp.web.exception.GlobalException;
+import com.tradecamp.models.util.Messages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,8 +39,6 @@ public class StockDataService {
 
     public List<StockDataDto> getRandomStockData(int sum) {
         try {
-
-
             RabbitRequest request = RabbitRequest.builder()
                     .type(RabbitRequestType.STOCK_RANDOM)
                     .message(String.valueOf(sum)).build();
@@ -49,7 +48,7 @@ public class StockDataService {
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
             if (rabbitResponse.getCode() != 200) {
-                throw new GlobalException(ErrorMessages.INTERNAL_SERVER_ERROR);
+                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), new TypeReference<List<StockDataDto>>() {
             });

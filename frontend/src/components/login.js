@@ -15,7 +15,7 @@ function Login() {
         {user, pass})
         .then(() => window.location = '/')
         .catch(e => console.log(e));
-    return AuthApi.signUp({user, pass})
+    return AuthApi.signUp({name: user, password: pass})
         .then((r) => r.json())
         .then(d => console.log(d))
         .catch(e => console.log(e));
