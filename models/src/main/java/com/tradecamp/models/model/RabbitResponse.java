@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RabbitResponse {
-    private  String body;
-    private  int code;
+    private String body;
+    private String error;
 }

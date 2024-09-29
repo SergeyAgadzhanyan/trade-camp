@@ -28,6 +28,10 @@ public class UserController {
     public UserDto get(@RequestParam @NotBlank @Size(min = 3) String name) {
         return userService.getByName(name);
     }
+    @GetMapping("/current")
+    public UserDto getCurrent() {
+        return userService.getCurrentUser();
+    }
 
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.OK)
@@ -35,9 +39,15 @@ public class UserController {
         userService.deleteByName(name);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/stat")
     public TradeResultResponse setStat(@RequestBody TradeResultRequest tradeResultRequest) {
         return userService.setTradeResult(tradeResultRequest);
+    }
+
+    @GetMapping("/stat/last")
+    public TradeHistoryDtoResponse getStat() {
+        return userService.getLastStat();
     }
 
 }

@@ -48,12 +48,20 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByName(tradeResultRequest.getUserName())
                 .orElseThrow(() -> new ApplicationException(Messages.RESOURCE_NOT_FOUND.getMessage(),
                         HttpStatus.NOT_FOUND));
-        Optional<TradeHistory> lastTrade = tradeHistoryRepository.findLast();
+        Optional<TradeHistory> lastTrade = tradeHistoryRepository.findLast(user.getName());
         BigDecimal lastScore = lastTrade.isPresent() ? lastTrade.get().getScoreResult() : user.getStartScore();
 
         TradeHistory tradeHistory = tradeHistoryMapper.toTradeHistory(tradeResultRequest,
                 user, lastScore);
         tradeHistory = tradeHistoryRepository.save(tradeHistory);
         return tradeHistoryMapper.toTradeResultResponse(tradeHistory);
+    }
+
+    @Override
+    public TradeHistoryDtoResponse getLastTrade(String userName) {
+        return tradeHistoryMapper.toTradeHistoryResponseDto(tradeHistoryRepository
+                .findLast(userName)
+                .orElseThrow(() -> new ApplicationException(Messages.RESOURCE_NOT_FOUND.getMessage(),
+                        HttpStatus.NOT_FOUND)));
     }
 }

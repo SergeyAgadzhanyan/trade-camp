@@ -10,7 +10,6 @@ import com.tradecamp.models.model.RabbitResponse;
 import com.tradecamp.user.Application;
 import com.tradecamp.user.entity.User;
 import com.tradecamp.user.repository.UserRepository;
-import com.tradecamp.user.service.impl.UserConsumerImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,17 +17,19 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.StringUtils;
 
 import static com.tradecamp.models.model.RabbitRequestType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
-class UserConsumerImplTest {
+class UserConsumerTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserConsumerImpl userConsumerImpl;
+    private UserConsumer userConsumer;
     private final static String ADMIN_NAME = "admin";
     private final static String NEW_USER_CREATE_NAME = "newUser";
     private final static String ADMIN_PASS = "admin";
@@ -62,7 +63,7 @@ class UserConsumerImplTest {
     @Test
     void findUser() throws JsonProcessingException {
         String stringResponse =
-                userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+                userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                         .type(USER_FIND)
                         .message(objectMapper.writeValueAsString(userDtoGet))
                         .build()));
@@ -75,14 +76,14 @@ class UserConsumerImplTest {
     void create() throws JsonProcessingException {
         userDtoCreate.setName(NEW_USER_CREATE_NAME);
 
-        userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+        userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                 .type(USER_CREATE)
                 .message(objectMapper.writeValueAsString(userDtoCreate))
                 .build()));
 
         userDtoGet.setName(NEW_USER_CREATE_NAME);
         String stringResponse =
-                userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+                userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                         .type(USER_FIND)
                         .message(objectMapper.writeValueAsString(userDtoGet))
                         .build()));
@@ -97,25 +98,25 @@ class UserConsumerImplTest {
 
         userDtoCreate.setName(NEW_USER_CREATE_NAME);
 
-        userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+        userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                 .type(USER_CREATE)
                 .message(objectMapper.writeValueAsString(userDtoCreate))
                 .build()));
 
-        userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+        userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                 .type(USER_DELETE)
                 .message(NEW_USER_CREATE_NAME)
                 .build()));
 
         userDtoGet.setName(NEW_USER_CREATE_NAME);
         String stringResponse =
-                userConsumerImpl.queueListener(objectMapper.writeValueAsString(RabbitRequest.builder()
+                userConsumer.handleMessage(objectMapper.writeValueAsString(RabbitRequest.builder()
                         .type(USER_FIND)
                         .message(objectMapper.writeValueAsString(userDtoGet))
                         .build()));
 
         RabbitResponse response = objectMapper.readValue(stringResponse, RabbitResponse.class);
-        assertEquals(404, response.getCode());
+        assertTrue(StringUtils.hasText(response.getError()));
     }
 
 }

@@ -7,7 +7,6 @@ import com.tradecamp.models.exception.ApplicationException;
 import com.tradecamp.models.model.RabbitRequest;
 import com.tradecamp.models.model.RabbitRequestType;
 import com.tradecamp.models.model.RabbitResponse;
-import com.tradecamp.models.util.Messages;
 import com.tradecamp.web.configuration.MyUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import static com.tradecamp.models.util.RabbitVar.USER_EXCHANGE;
 import static com.tradecamp.models.util.RabbitVar.USER_ROUTING_KEY;
@@ -41,8 +41,8 @@ public class UserService {
             String response = (String) rabbitTemplate.convertSendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY,
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
-            if (rabbitResponse.getCode() != 201) {
-                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (StringUtils.hasText(rabbitResponse.getError())) {
+                throw new ApplicationException(rabbitResponse.getError(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), UserDtoGet.class);
         } catch (JsonProcessingException e) {
@@ -62,8 +62,8 @@ public class UserService {
             String response = (String) rabbitTemplate.convertSendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY,
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
-            if (rabbitResponse.getCode() != 200) {
-                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (StringUtils.hasText(rabbitResponse.getError())) {
+                throw new ApplicationException(rabbitResponse.getError(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), UserDto.class);
         } catch (JsonProcessingException e) {
@@ -86,8 +86,8 @@ public class UserService {
 
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
 
-            if (rabbitResponse.getCode() != 204) {
-                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (StringUtils.hasText(rabbitResponse.getError())) {
+                throw new ApplicationException(rabbitResponse.getError(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -105,8 +105,8 @@ public class UserService {
             String response = (String) rabbitTemplate.convertSendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY,
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
-            if (rabbitResponse.getCode() != 200) {
-                throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            if (StringUtils.hasText(rabbitResponse.getError())) {
+                throw new ApplicationException(rabbitResponse.getError(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), TradeResultResponse.class);
         } catch (JsonProcessingException e) {
@@ -114,4 +114,28 @@ public class UserService {
         }
     }
 
+    public TradeHistoryDtoResponse getLastStat() {
+        MyUserPrincipal currentUser = (MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            RabbitRequest request = RabbitRequest.builder()
+                    .type(RabbitRequestType.USER_GET_LAST_TRADE_RESULT)
+                    .message(currentUser.getUsername())
+                    .build();
+
+            String response = (String) rabbitTemplate.convertSendAndReceive(USER_EXCHANGE, USER_ROUTING_KEY,
+                    objectMapper.writeValueAsString(request));
+            RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
+            if (StringUtils.hasText(rabbitResponse.getError())) {
+                throw new ApplicationException(rabbitResponse.getError(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return objectMapper.readValue(rabbitResponse.getBody(), TradeHistoryDtoResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UserDto getCurrentUser() {
+        MyUserPrincipal currentUser = (MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return getByName(currentUser.getUsername());
+    }
 }

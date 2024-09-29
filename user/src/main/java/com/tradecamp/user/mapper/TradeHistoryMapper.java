@@ -1,6 +1,7 @@
 package com.tradecamp.user.mapper;
 
 
+import com.tradecamp.models.dto.TradeHistoryDtoResponse;
 import com.tradecamp.models.dto.TradeResultRequest;
 import com.tradecamp.models.dto.TradeResultResponse;
 import com.tradecamp.user.entity.TradeHistory;
@@ -22,5 +23,8 @@ public interface TradeHistoryMapper {
     @Mapping(target = "score", source = "scoreResult")
     @Mapping(target = "startScore", expression = "java(history.getUser().getStartScore())")
     TradeResultResponse toTradeResultResponse(TradeHistory history);
+
+    @Mapping(target = "userName", source = "user.name")
+    TradeHistoryDtoResponse toTradeHistoryResponseDto(TradeHistory entity);
 }
 

@@ -1,0 +1,5 @@
+.user__balance {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 1px;
+}

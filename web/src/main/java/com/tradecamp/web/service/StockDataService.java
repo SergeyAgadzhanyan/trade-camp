@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,7 +48,7 @@ public class StockDataService {
                     STOCK_ROUTING_KEY,
                     objectMapper.writeValueAsString(request));
             RabbitResponse rabbitResponse = objectMapper.readValue(response, RabbitResponse.class);
-            if (rabbitResponse.getCode() != 200) {
+            if (StringUtils.hasText(rabbitResponse.getError())) {
                 throw new ApplicationException(Messages.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return objectMapper.readValue(rabbitResponse.getBody(), new TypeReference<List<StockDataDto>>() {
