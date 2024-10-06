@@ -11,6 +11,7 @@ import com.tradecamp.web.configuration.MyUserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class UserService {
 
     private final RabbitTemplate rabbitTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final Environment env;
 
 
     public UserDtoGet create(UserDtoCreate userDtoCreate) {
@@ -55,6 +57,7 @@ public class UserService {
     }
 
     private UserDto find(UserDtoGet userDtoGet) {
+        log.info("Find request {}", userDtoGet.toString());
         try {
             RabbitRequest request = RabbitRequest.builder()
                     .type(RabbitRequestType.USER_FIND)
