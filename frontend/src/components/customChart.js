@@ -1,7 +1,6 @@
 import Chart from 'react-apexcharts';
 import React from 'react';
 
-
 const CustomChart = ({options, series}) => {
   return (
       <div className={'main__custom-chart'}>

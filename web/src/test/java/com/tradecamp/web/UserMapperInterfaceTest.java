@@ -4,8 +4,6 @@ package com.tradecamp.web;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @SpringBootTest()
 @ActiveProfiles("local")
 class UserMapperInterfaceTest {

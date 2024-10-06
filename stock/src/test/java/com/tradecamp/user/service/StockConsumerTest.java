@@ -7,7 +7,6 @@ import com.tradecamp.models.dto.StockDataDto;
 import com.tradecamp.models.model.RabbitRequest;
 import com.tradecamp.models.model.RabbitResponse;
 import com.tradecamp.stock.Application;
-import com.tradecamp.stock.service.impl.StockConsumerImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

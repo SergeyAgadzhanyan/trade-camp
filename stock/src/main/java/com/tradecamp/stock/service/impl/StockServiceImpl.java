@@ -4,7 +4,6 @@ import com.tradecamp.models.dto.StockDataDto;
 import com.tradecamp.stock.mapper.StockDataMapper;
 import com.tradecamp.stock.service.StockApi;
 import com.tradecamp.stock.service.StockService;
-import com.tradecamp.stock.storage.StockDataStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

@@ -20,6 +20,27 @@ class UserApi extends Api {
     }).then(this._checkResponse);
 
   }
+
+  getLastTrade() {
+    return fetch(Text.LastTrade, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(this._checkResponse);
+
+  }
+
+  getCurrentUser() {
+    return fetch(Text.CurrentUser, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }).then(this._checkResponse);
+  }
 }
 
 export default new UserApi();

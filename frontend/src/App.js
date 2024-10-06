@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomChart from './components/customChart';
 import {makeRandomCandleRange} from './utils/CandleUtils';
+import {calculateDiff, getLastTradeOrDefault} from './utils/UserUtils';
 import {getChartObject} from './utils/chatObjectUtils';
 import {checkByWinningPrice} from './utils/resultUtils';
 import Result from './components/result';
@@ -22,6 +23,9 @@ function App() {
   const [isShowResult, setIsShowResult] = React.useState(false);
   const [isWin, setIsWin] = React.useState(false);
   const [isOpenProfilePopup, setIsOpenProfilePopup] = React.useState(false);
+  const [isPositiveBalance, setIsPositiveBalance] = React.useState(true);
+  const [balance, setBalance] = React.useState(1000);
+  const [balanceDiff, setBalanceDiff] = React.useState(50);
 
   React.useEffect(() => {
     renderChart();
@@ -45,6 +49,11 @@ function App() {
       });
       setShortSeries(shortS);
       setFullSeries(fullS);
+    });
+    getLastTradeOrDefault().then(r => {
+      setIsPositiveBalance(r.isPositive);
+      setBalance(r.balance);
+      setBalanceDiff(r.balanceDiff);
     });
   }
 
@@ -91,7 +100,11 @@ function App() {
         {name, startDate, endDate, currency, score, operation}).then(result => {
       if (result.ok) {
         result.json().then(result => {
-          console.log(`Data was successful sending.Score is ${result.score}`);
+          let lastScore = result.score;
+          let diff = calculateDiff(result.startScore, lastScore);
+          setBalance(lastScore);
+          setBalanceDiff(diff);
+          setIsPositiveBalance(diff > 0 || diff === 0);
         });
       }
     });
@@ -144,13 +157,29 @@ function App() {
           <CustomChart series={options.series} isWin={isWin}
                        isShowResult={isShowResult} options={options.options}
                        onClick={handleAction}/>
-          {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
-              <ActionButtons
-                  onClick={handleAction}
-                  profitState={{profitPercent, setProfitPercent}}
-                  loseState={{losePercent, setLosePercent}}
-              />
-          }
+          <div className="user">
+            <div className="user__balance">
+              <div className="user__balance-total">
+                <p className={'user__balance-title'}>Balance</p>
+                <p className={`user__balance-value ${isPositiveBalance
+                    ? 'user__balance-value_positive'
+                    : 'user__balance-value_negative'}`}>{balance}$</p>
+              </div>
+              <div className="user__balance-diff">
+                <p className={`user__balance-diff-title ${isPositiveBalance
+                    ? 'user__balance-diff-title-positive'
+                    : 'user__balance-diff-title-negative'}`}>
+                  {isPositiveBalance ?? `+`} {balanceDiff}%</p>
+              </div>
+            </div>
+            {isShowResult ? <Result isWin={isWin} handleRestart={restart}/> :
+                <ActionButtons
+                    onClick={handleAction}
+                    profitState={{profitPercent, setProfitPercent}}
+                    loseState={{losePercent, setLosePercent}}
+                />
+            }
+          </div>
         </div>
         <ProfilePopup isOpen={isOpenProfilePopup}/>
       </>);

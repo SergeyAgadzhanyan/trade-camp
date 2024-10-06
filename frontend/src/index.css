@@ -35,6 +35,17 @@
 @import "./blocks/login/__input/login__input.css";
 @import "./blocks/login/__title/login__title.css";
 @import "./blocks/login/__gradient-custom/login__gradient-custom.css";
+@import "./blocks/user/user.css";
+@import "./blocks/user/__balance/user__balance.css";
+@import "./blocks/user/__balance-diff/user__balance-diff.css";
+@import "./blocks/user/__balance-diff-title/user__balance-diff-title.css";
+@import "./blocks/user/__balance-title/user__balance-title.css";
+@import "./blocks/user/__balance-total/user__balance-total.css";
+@import "./blocks/user/__balance-value/user__balance-value.css";
+@import "blocks/user/__balance-value_positive/user__balance-value_positive.css";
+@import "blocks/user/__balance-value_negative/user__balance-value_negative.css";
+@import "blocks/user/__balance-diff-title-negative/user__balance-diff-title-negative.css";
+@import "blocks/user/__balance-diff-title-positive/user__balance-diff-title-positive.css";
 
 
 

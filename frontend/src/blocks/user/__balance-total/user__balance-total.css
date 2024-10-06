@@ -1,0 +1,4 @@
+.user__balance-total {
+    display: flex;
+    flex-direction: column;
+}

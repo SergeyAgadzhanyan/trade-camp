@@ -7,4 +7,6 @@ export default {
   LinkSignUp: 'http://localhost:8083/user',
   LinkCheckMe: 'http://localhost:8083/user/me',
   TradeResult: 'http://localhost:8083/user/stat',
+  LastTrade: 'http://localhost:8083/user/stat/last',
+  CurrentUser: 'http://localhost:8083/user/current',
 };
