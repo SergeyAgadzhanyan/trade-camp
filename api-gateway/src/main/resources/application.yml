@@ -9,13 +9,21 @@ spring:
           enabled: true
           lower-case-service-id: true
 
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allow-credentials: true
+
       routes:
-        - id: login
+        - id: main
           uri: lb://web
           predicates:
-            - Path=/perform_login
-            - Method=POST
-
+            - Path=/**
 eureka:
   client:
     service-url:

@@ -30,7 +30,6 @@ public class UserService {
 
     private final RabbitTemplate rabbitTemplate;
     private final PasswordEncoder passwordEncoder;
-    private final Environment env;
 
 
     public UserDtoGet create(UserDtoCreate userDtoCreate) {
