@@ -29,7 +29,7 @@ export async function getLastTradeOrDefault() {
 }
 
 export function calculateDiff(startScore, scoreResult) {
-  return ((scoreResult - startScore) * 100 / scoreResult).toFixed(2);
+  return (scoreResult - startScore) / (startScore / 100).toFixed(2);
 }
 
 
