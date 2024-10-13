@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/perform_login", "/v3/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/perform_login", "/v3/**", "/swagger-ui/**", "/test/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user").permitAll()
                         .anyRequest()
                         .authenticated()
